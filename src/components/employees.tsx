@@ -17,7 +17,7 @@ export function Employees() {
     getEmployees();
   }, []);
   return (
-    <div>
+    <div className="flex items-center flex-col justify-center w-full h-screen">
       {employees.map((employee, i) => {
         return (
           <div key={i} className="flex gap-10">

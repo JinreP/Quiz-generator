@@ -19,7 +19,7 @@ export const POST = async (req: Request) => {
       `INSERT INTO employees 
       (id,firstname, lastname, age, gender, position, hireDate, departmentId) 
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) `,
-      ["11", "MANDUUL", "CHULUUNBAT", "30", "Male", "AAAAA", "2026.09.11", "2"]
+      ["12", "Mofioso", "Ganbat", "19", "Male", "Bavuulah", "2006.09.11", "2"]
     );
 
     console.log("RESPONSE!", res);
