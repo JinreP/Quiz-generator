@@ -7,26 +7,41 @@ import { use, useState } from "react";
 export default function QuizText() {
   const [current, setCurrent] = useState(1);
   const [quiz, setQuiz] = useState(2);
-  const [quizAnswer, setQuizAnswer] = useState<any[]>([]);
+  const [quizAnswers, setQuizAnswers] = useState<any[]>([]);
   const answers = [
     {
       answer: "Yesugei",
+      correct: false,
     },
 
     {
       answer: "Temujin",
+      correct: true,
     },
 
     {
       answer: "Jamukha",
+      correct: false,
     },
 
     {
       answer: "Toghrui",
+      correct: false,
     },
   ];
 
-  console.log(quizAnswer);
+  function handleAnswer() {
+    setQuizAnswers((prev) => [...prev, answers]);
+
+    if (current < quiz) {
+      setCurrent(current + 1);
+    }
+
+    if(answers){
+      
+    }
+  }
+  console.log(quizAnswers);
 
   return (
     <div className="flex flex-col justify-center items-center w-full h-full">
@@ -38,7 +53,7 @@ export default function QuizText() {
         </Button>
       </div>
       <p className="text-gray-500">
-        Take a quick test about your knowledge from your content{" "}
+        Take a quick test about your knowledge from your content
       </p>
 
       <div className="w-[558px] h-[200px] flex flex-col items-center justify-center border rounded-2xl">
@@ -53,10 +68,9 @@ export default function QuizText() {
           {answers.map((answer, i) => {
             return (
               <Button
-                onChange={(e) => setQuizAnswer(e.target.value)}
                 key={i}
                 className="w-[250px] mt-4 font-bold"
-                onClick={() => setCurrent(current + 1)}
+                onClick={handleAnswer}
                 disabled={current >= quiz}
               >
                 {answer.answer}
