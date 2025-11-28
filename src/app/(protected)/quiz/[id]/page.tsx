@@ -1,13 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import {
-  BackIcon,
-  Bookicon,
-  DocumentIcon,
-  Star,
-} from "../../../components/icons/icons";
-import { Button } from "../../../components/ui/button";
+
 import {
   Dialog,
   DialogContent,
@@ -16,6 +10,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { BackIcon, Bookicon, DocumentIcon, Star } from "@/components/icons/icons";
 
 export default function Quiz() {
   const router = useRouter();
