@@ -8,37 +8,19 @@ export default function QuizText() {
   const [current, setCurrent] = useState(1);
   const [quiz, setQuiz] = useState(2);
   const [quizAnswers, setQuizAnswers] = useState<any[]>([]);
-  const answers = [
-    {
-      answer: "Yesugei",
-      correct: false,
-    },
+  const [answers, setAnswers] = useState<any[]>([]);
 
-    {
-      answer: "Temujin",
-      correct: true,
-    },
-
-    {
-      answer: "Jamukha",
-      correct: false,
-    },
-
-    {
-      answer: "Toghrui",
-      correct: false,
-    },
-  ];
-
-  function handleAnswer() {
-    setQuizAnswers((prev) => [...prev, answers]);
+  function handleAnswer(selected: { answer: string; correct: boolean }) {
+    setQuizAnswers((prev) => [...prev, selected]);
 
     if (current < quiz) {
       setCurrent(current + 1);
     }
 
-    if(answers){
-      
+    if (selected.correct) {
+      console.log(" correct answer");
+    } else {
+      console.log("wrong answer");
     }
   }
   console.log(quizAnswers);
@@ -70,7 +52,7 @@ export default function QuizText() {
               <Button
                 key={i}
                 className="w-[250px] mt-4 font-bold"
-                onClick={handleAnswer}
+                onClick={() => handleAnswer(answer)}
                 disabled={current >= quiz}
               >
                 {answer.answer}
