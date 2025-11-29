@@ -16,47 +16,19 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-
-const items = [
-  {
-    title: "Genghis Khan",
-    url: "http://localhost:3000/quiz",
-  },
-  {
-    title: "Figma ашиглах заавар",
-    url: "#",
-  },
-  {
-    title: "Санхүүгийн шийдвэрүүд",
-    url: "#",
-  },
-  {
-    title: "Figma-д загвар зохион бүтээх аргачлалууд",
-    url: "#",
-  },
-  {
-    title: "Санхүүгийн технологи 2023",
-    url: "#",
-  },
-  {
-    title: "Хэрэглэгчийн интерфейс дизайны шилдэг туршлага",
-    url: "#",
-  },
-  {
-    title: "Архитектур загварчлалын хөтөлбөрүүд",
-    url: "#",
-  },
-  {
-    title: "Эрүүл амьдралын хэв маяг",
-    url: "#",
-  },
-  {
-    title: "Технологийн салбарт хийгдэж буй инноваци",
-    url: "#",
-  },
-];
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export function AppSidebar() {
+  const [articles, setArticles] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function Load() {
+      const res = await axios.get("http://localhost:3000/api/articles");
+      setArticles(res.data);
+    }
+    Load();
+  }, []);
   const sidebar = useSidebar();
   return (
     <Sidebar className="mt-13.5">
@@ -71,10 +43,10 @@ export function AppSidebar() {
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {items.map((item) => (
+                {articles.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <Link href={item.url}>
+                      <Link href={`http://localhost:3000/quiz/${item.id}`}>
                         <span className="">{item.title}</span>
                       </Link>
                     </SidebarMenuButton>

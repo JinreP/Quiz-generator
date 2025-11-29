@@ -35,3 +35,12 @@ model salaries {
   effectivefrom DateTime?  @db.Date
   employees     employees? @relation(fields: [employeeid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
+
+model article {
+  id       Int     @id @default(autoincrement())
+  title      String    @db.VarChar(255)
+  content    String?
+  summary    String?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @default(now()) @db.Timestamp(6)
+}
