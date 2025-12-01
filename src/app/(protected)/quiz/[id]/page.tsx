@@ -41,7 +41,7 @@ export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
     router.push("http://localhost:3000");
   };
   return (
-    <div className="w-[700px] h-[540px] rounded-2xl flex flex-col items-start gap-1 px-13 justify-center border">
+    <div className="w-[700px] h-[500px]  rounded-2xl flex flex-col items-start gap-4 px-13 justify-center border">
       <Button className="bg-white w-[50px] border mr-10" onClick={handleRouter}>
         <BackIcon />
       </Button>

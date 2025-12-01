@@ -8,9 +8,16 @@ export default function QuizText() {
   const [current, setCurrent] = useState(1);
   const [quiz, setQuiz] = useState(2);
   const [quizAnswers, setQuizAnswers] = useState<any[]>([]);
-  const [answers, setAnswers] = useState<any[]>([]);
+  // const [answers, setAnswers] = useState<any[]>([]);
 
-  function handleAnswer(selected: { answer: string; correct: boolean }) {
+  const answers = [
+    { question: "Yesuge", correct: false },
+    { question: "Temuujin", correct: true },
+    { question: "aaaa", correct: false },
+    { question: "eee", correct: false },
+  ];
+
+  function handleAnswer(selected: { question: string; correct: boolean }) {
     setQuizAnswers((prev) => [...prev, selected]);
 
     if (current < quiz) {
@@ -27,15 +34,17 @@ export default function QuizText() {
   console.log(quizAnswers);
 
   return (
-    <div className="flex flex-col justify-center items-center w-full h-full">
-      <div className="flex items-center gap-3">
-        <Star />
-        <h1 className="text-2xl font-bold">Quick Test</h1>
-        <Button className="w-12 bg-white h-10">
+    <div className="flex flex-col justify-center gap-2 items-center w-full h-full">
+      <div className="flex  gap-90">
+        <div className="flex items-center gap-3">
+          <Star />
+          <h1 className="text-2xl font-bold">Quick Test</h1>
+        </div>
+        <Button className="w-12 bg-gray-300 rounded-2xl h-10">
           <CloseIcon />
         </Button>
       </div>
-      <p className="text-gray-500">
+      <p className="text-gray-500 pr-35">
         Take a quick test about your knowledge from your content
       </p>
 
@@ -56,7 +65,7 @@ export default function QuizText() {
                 onClick={() => handleAnswer(answer)}
                 disabled={current >= quiz}
               >
-                {answer.answer}
+                {answer.question}
               </Button>
             );
           })}
