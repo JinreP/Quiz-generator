@@ -1,6 +1,14 @@
 import { Navbar } from "@/components/Navbar";
 import { AppSidebar } from "@/components/Sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 
 export default function ProtectedLayout({
   children,
@@ -8,16 +16,25 @@ export default function ProtectedLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div>
-      <SidebarProvider defaultOpen={false}>
-        <div className="w-full">
-          <Navbar />
-          <div className="flex">
-            <AppSidebar />
-            {children}
+    <ClerkProvider
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+    >
+      <div>
+        <SidebarProvider defaultOpen={false}>
+          <div className="w-full">
+            <div className="flex justify-between px-10 items-center  w-full">
+              <Navbar />
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </div>
+            <div className="flex">
+              <AppSidebar />
+              {children}
+            </div>
           </div>
-        </div>
-      </SidebarProvider>
-    </div>
+        </SidebarProvider>
+      </div>
+    </ClerkProvider>
   );
 }

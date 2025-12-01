@@ -41,46 +41,49 @@ export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
     router.push("http://localhost:3000");
   };
   return (
-    <div className="w-[700px] h-[500px]  rounded-2xl flex flex-col items-start gap-4 px-13 justify-center border">
-      <Button className="bg-white w-[50px] border mr-10" onClick={handleRouter}>
-        <BackIcon />
-      </Button>
-      <div className="flex items-center gap-3">
-        <Star />
-        <h1 className="text-2xl font-bold">Article Quiz Generator</h1>
+    <div className="flex items-center justify-center w-full h-screen">
+      <div className="w-[700px] h-[500px]  rounded-2xl flex flex-col mb-40 items-start gap-4 px-13 justify-center border">
+        <Button
+          className="bg-white w-[50px] border mr-10"
+          onClick={handleRouter}
+        >
+          <BackIcon />
+        </Button>
+        <div className="flex items-center gap-3">
+          <Star />
+          <h1 className="text-2xl font-bold">Article Quiz Generator</h1>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Bookicon />
+          <h1 className="text-gray-500 font-bold">Summarized content</h1>
+        </div>
+
+        <h1 className="text-2xl font-bold">{article.title}</h1>
+
+        <p className="">{article.summary}</p>
+
+        <div className="flex items-center gap-3">
+          <DocumentIcon />
+          <p className="text-gray-400 ">Article Content</p>
+        </div>
+
+        <p className="h-[50px] overflow-hidden">{article.content}</p>
+        <Dialog>
+          <DialogTrigger>
+            <p className="font-bold pl-130">See more</p>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="font-bold text-2xl mb-4">
+                {article.title}
+              </DialogTitle>
+              <DialogDescription>{article.summary}</DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+        <Button className="w-40 ml-110">Take a quiz</Button>
       </div>
-
-      <div className="flex items-center gap-3">
-        <Bookicon />
-        <h1 className="text-gray-500 font-bold">Summarized content</h1>
-      </div>
-
-      <h1 className="text-2xl font-bold">{article.title}</h1>
-
-      <p className="">{article.summary}</p>
-
-      <div className="flex items-center gap-3">
-        <DocumentIcon />
-        <p className="text-gray-400 ">Article Content</p>
-      </div>
-
-      <p className="h-[50px] overflow-hidden">{article.content}</p>
-      <Dialog>
-        <DialogTrigger>
-          <p className="font-bold pl-130">See more</p>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="font-bold text-2xl mb-4">
-              {article.title}
-            </DialogTitle>
-            <DialogDescription>
-            {article.summary}
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-      <Button className="w-40 ml-110">Take a quiz</Button>
     </div>
   );
 }

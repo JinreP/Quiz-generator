@@ -3,7 +3,7 @@ import { Employees } from "@/components/Employees";
 
 export default function Home() {
   return (
-    <div className="flex  justify-center w-full h-full">
+    <div className="flex items-center justify-center w-full h-full">
       <Article />
     </div>
   );

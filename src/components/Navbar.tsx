@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 export function Navbar() {
   return (
-    <div className="flex items-center justify-between px-15 h-[55px] border ">
+    <div className="flex items-center justify-between px-15 h-[55px]  ">
       <h1 className="text-2xl font-bold">Quiz app</h1>
-      <Avatar>
+      {/* <Avatar>
         <DropdownMenu>
           <DropdownMenuTrigger>
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -26,7 +26,7 @@ export function Navbar() {
             <DropdownMenuItem>Subscription</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </Avatar>
+      </Avatar> */}
     </div>
   );
 }
