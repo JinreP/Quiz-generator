@@ -12,7 +12,7 @@ export const GET = async () => {
 };
 
 export const POST = async (req: Request) => {
-  const { title, summary, content } = await req.json();
+  const { title, summary, content } = await req.json( );
   try {
     const article = await prisma.article.create({
       data: {
