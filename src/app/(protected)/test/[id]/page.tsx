@@ -1,37 +1,120 @@
 "use client";
 
-import { CloseIcon, Star } from "@/components/icons/icons";
+import { CloseIcon, Correct, InCorrect, Star } from "@/components/icons/icons";
 import { Button } from "@/components/ui/button";
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default function QuizText() {
-  const [current, setCurrent] = useState(1);
-  const [quiz, setQuiz] = useState(2);
-  const [quizAnswers, setQuizAnswers] = useState<any[]>([]);
-  // const [answers, setAnswers] = useState<any[]>([]);
+export default function QuizText({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
 
-  const answers = [
-    { question: "Yesuge", correct: false },
-    { question: "Temuujin", correct: true },
-    { question: "aaaa", correct: false },
-    { question: "eee", correct: false },
-  ];
+  const [current, setCurrent] = useState(0);
+  const [quiz, setQuiz] = useState<any[]>([]);
+  const [finished, setFinished] = useState(false);
+  const [userAnswers, setUserAnswers] = useState<any[]>([]);
+  const [article, setArticle] = useState("");
 
-  function handleAnswer(selected: { question: string; correct: boolean }) {
-    setQuizAnswers((prev) => [...prev, selected]);
+  useEffect(() => {
+    async function loadArticle() {
+      const res = await fetch("/api/articles");
+      const data = await res.json();
+      const found = data.find((article: any) => article.id === Number(id));
+      if (found) setArticle(found.content);
+    }
+    loadArticle();
+  }, [id]);
 
-    if (current < quiz) {
-      setCurrent(current + 1);
+  useEffect(() => {
+    async function createQuiz() {
+      if (!article) return;
+
+      const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ article }),
+      });
+
+      const data = await res.json();
+      setQuiz(data);
     }
 
-    if (selected.correct) {
-      console.log(" correct answer");
+    createQuiz();
+  }, [article]);
+
+  if (quiz.length === 0) return <p>loading...</p>;
+
+  const question = quiz[current];
+
+  function pick(a: any) {
+    setUserAnswers((prev) => [...prev, a]);
+
+    if (current < quiz.length - 1) {
+      setCurrent(current + 1);
     } else {
-      console.log("wrong answer");
+      setFinished(true);
     }
   }
 
-  console.log(quizAnswers);
+  if (finished) {
+    const score = userAnswers.filter((ans) => ans.correct).length;
+
+    return (
+      <div className="p-10 flex flex-col justify-center w-full h-screen items-center gap-6">
+        <div className="flex items-center gap-3">
+          <Star />
+          <h1 className="text-2xl font-bold">Quiz completed</h1>
+        </div>
+
+        <p className="text-gray-500">Let’s see what you did</p>
+
+        <div className="text-2xl font-bold">
+          Your score: {score} / {quiz.length}
+        </div>
+
+        <div className="border rounded-xl p-5 w-[600px] space-y-6">
+          {quiz.map((questionItem, index) => {
+            const userAnswer = userAnswers[index];
+            const correctAnswer = questionItem.answers.find(
+              (a: any) => a.correct
+            );
+
+            const isCorrect = userAnswer.correct;
+
+            return (
+              <div key={index} className="border-b pb-3 flex flex-col gap-1">
+                <div className="flex items-center gap-3">
+                  <div className="mt-1">
+                    {isCorrect ? <Correct /> : <InCorrect />}
+                  </div>{" "}
+                  <div className="flex flex-col">
+                    <p className="text-gray-500">
+                    {index + 1}. {questionItem.question}
+                  </p>
+                  <p className={isCorrect ? "text-green-600" : "text-red-500"}>
+                    {isCorrect ? "Your answer: " : "Your answer: "}
+                    {userAnswer.answer}
+                  </p>
+                  </div>
+                </div>
+
+                {!isCorrect && (
+                  <p className="text-green-600">
+                    Correct: {correctAnswer.answer}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <Button onClick={() => window.location.reload()}>Restart quiz</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col justify-center gap-2 items-center w-full h-full">
@@ -44,31 +127,26 @@ export default function QuizText() {
           <CloseIcon />
         </Button>
       </div>
-      <p className="text-gray-500 pr-35">
-        Take a quick test about your knowledge from your content
-      </p>
 
       <div className="w-[558px] h-[200px] flex flex-col items-center justify-center border rounded-2xl">
         <div className="flex gap-3 pt-3 items-center">
-          <h1 className="font-bold ">What was Genghis Khan’s birth name?</h1>
+          <h1 className="font-bold ">{question.question}</h1>
           <div className="flex">
-            <span className="font-bold">{current}</span>
-            <span className="text-gray-500">/{quiz}</span>
+            <span className="font-bold">{current + 1}</span>
+            <span className="text-gray-500">/{quiz.length}</span>
           </div>
         </div>
+
         <div className="flex flex-wrap w-[600px] justify-center h-[300px] gap-6">
-          {answers.map((answer, i) => {
-            return (
-              <Button
-                key={i}
-                className="w-[250px] mt-4 font-bold"
-                onClick={() => handleAnswer(answer)}
-                disabled={current >= quiz}
-              >
-                {answer.question}
-              </Button>
-            );
-          })}
+          {question.answers.map((a: any, i: number) => (
+            <Button
+              key={i}
+              className="w-[250px] mt-4 font-bold"
+              onClick={() => pick(a)}
+            >
+              {a.answer}
+            </Button>
+          ))}
         </div>
       </div>
     </div>

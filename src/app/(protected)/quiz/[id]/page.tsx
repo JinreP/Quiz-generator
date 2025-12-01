@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import {
   Dialog,
@@ -22,6 +22,9 @@ import axios from "axios";
 
 export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const searchParams = useSearchParams();
+  const articleText = searchParams.get("article") || "";
+
   const [article, setArticle] = useState<any>(null);
   const router = useRouter();
 
@@ -39,6 +42,10 @@ export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
   const handleRouter = (e: any) => {
     e.preventDefault();
     router.push("http://localhost:3000");
+  };
+  const quizTest = (e: any) => {
+    e.preventDefault();
+    router.push(`/test/${id}`);
   };
   return (
     <div className="flex items-center justify-center w-full h-screen">
@@ -82,7 +89,9 @@ export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
             </DialogHeader>
           </DialogContent>
         </Dialog>
-        <Button className="w-40 ml-110">Take a quiz</Button>
+        <Button className="w-40 ml-110" onClick={quizTest}>
+          Take a quiz
+        </Button>
       </div>
     </div>
   );
