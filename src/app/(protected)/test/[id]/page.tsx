@@ -1,9 +1,17 @@
 "use client";
 
-import { CloseIcon, Correct, InCorrect, Star } from "@/components/icons/icons";
+import {
+  CloseIcon,
+  Correct,
+  InCorrect,
+  RestartIcon,
+  SaveIcon,
+  Star,
+} from "@/components/icons/icons";
 import { Button } from "@/components/ui/button";
 import { use, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export default function QuizText({
   params,
@@ -85,33 +93,51 @@ export default function QuizText({
             const isCorrect = userAnswer.correct;
 
             return (
-              <div key={index} className="border-b pb-3 flex flex-col gap-1">
+              <div key={index} className=" pb-3 flex pl-6 flex-col gap-1">
                 <div className="flex items-center gap-3">
                   <div className="mt-1">
                     {isCorrect ? <Correct /> : <InCorrect />}
                   </div>{" "}
                   <div className="flex flex-col">
                     <p className="text-gray-500">
-                    {index + 1}. {questionItem.question}
-                  </p>
-                  <p className={isCorrect ? "text-green-600" : "text-red-500"}>
-                    {isCorrect ? "Your answer: " : "Your answer: "}
-                    {userAnswer.answer}
-                  </p>
+                      {index + 1}. {questionItem.question}
+                    </p>
+                    <p
+                      className={isCorrect ? "text-green-600" : "text-red-500"}
+                    >
+                      {isCorrect ? "Your answer: " : "Your answer: "}
+                      {userAnswer.answer}
+                    </p>
                   </div>
                 </div>
 
                 {!isCorrect && (
-                  <p className="text-green-600">
+                  <p className="text-green-600 pl-9">
                     Correct: {correctAnswer.answer}
                   </p>
                 )}
               </div>
             );
           })}
+          <div className="flex justify-between px-10">
+            <Button
+              onClick={() => window.location.reload()}
+              className="flex items-center gap-3 w-44 bg-white border rounded-2xl h-10 text-black "
+            >
+              <RestartIcon />
+              Restart quiz
+            </Button>
+            <Link href={"http://localhost:3000"}>
+              <Button
+                onClick={() => window.location.reload()}
+                className="flex items-center gap-3 w-44 border rounded-2xl h-10"
+              >
+                <SaveIcon />
+                Save and leave
+              </Button>
+            </Link>
+          </div>
         </div>
-
-        <Button onClick={() => window.location.reload()}>Restart quiz</Button>
       </div>
     );
   }
@@ -123,9 +149,11 @@ export default function QuizText({
           <Star />
           <h1 className="text-2xl font-bold">Quick Test</h1>
         </div>
-        <Button className="w-12 bg-gray-300 rounded-2xl h-10">
-          <CloseIcon />
-        </Button>
+        <Link href={"http://localhost:3000"}>
+          <Button className="w-12 bg-gray-300 rounded-2xl h-10">
+            <CloseIcon />
+          </Button>
+        </Link>
       </div>
 
       <div className="w-[558px] h-[200px] flex flex-col items-center justify-center border rounded-2xl">
