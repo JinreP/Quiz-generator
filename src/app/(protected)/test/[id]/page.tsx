@@ -166,7 +166,7 @@ export default function QuizText({
                 <CloseIcon />
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="w-[450px] h-[170px]">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-bold">
                   Are you sure?
@@ -176,13 +176,18 @@ export default function QuizText({
                   beginning.
                 </DialogDescription>
               </DialogHeader>
-              <div className="flex items-center gap-3">
-                <Button className="w-[190px] bg-black rounded-2xl text-white">
+              <div className="flex items-center justify-center  gap-3">
+                <Button
+                  onClick={() => window.location.reload()}
+                  className="w-[190px] bg-black rounded-2xl text-white"
+                >
                   Go back
                 </Button>
-                <Button className="w-[190px] bg-white rounded-2xl ">
-                  Cancel quiz
-                </Button>
+                <Link href={"/"}>
+                  <Button className="w-[190px] bg-white rounded-2xl text-black border border-gray-500 ">
+                    Cancel quiz
+                  </Button>
+                </Link>
               </div>
             </DialogContent>
           </Dialog>

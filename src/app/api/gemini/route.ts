@@ -2,7 +2,6 @@ import { GoogleGenAI } from "@google/genai";
 
 const apiKey = process.env.GEMINI_API_KEY;
 
-
 console.log("GEMINI_API_KEY:", process.env.GEMINI_API_KEY);
 
 const ai = new GoogleGenAI({
@@ -18,12 +17,12 @@ export async function POST(req: Request) {
     contents: [
       {
         text: `
-Generate 5 quiz questions from this article.
-
-Return like this but only in JSON only in raw json no codeblocks no markdown no random stuffs, don't break json
-The output MUST NOT contain Mongolian characters.
-don't break json
-don't include any quotes (“ ” " ") inside the question or answer text .
+ Generate 5 quiz questions from this article.
+ if user content is empty then make some content and 
+ Return like this but only in JSON only in raw json no codeblocks no markdown no random stuffs, don't break json
+ The output MUST NOT contain Mongolian characters.
+ don't break json
+ don't include any quotes (“ ” " ") inside the question or answer text .
 
 :
 [
@@ -37,7 +36,6 @@ don't include any quotes (“ ” " ") inside the question or answer text .
     ]
   }
 ]
-
 Article:
 ${article}
 `,

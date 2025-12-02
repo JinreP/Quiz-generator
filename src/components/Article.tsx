@@ -5,6 +5,7 @@ import { DocumentIcon, Star } from "./icons/icons";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import axios from "axios";
+import { Textarea } from "./ui/textarea";
 
 export function Article() {
   const [title, setTitle] = useState("");
@@ -13,7 +14,14 @@ export function Article() {
 
   async function addArticle() {
     try {
-      const res = await axios.post("http://localhost:3000/api/articles", {
+      const detailed = await axios.post("/api/summarize", {
+        title,
+        content,
+      });
+
+      const summary = detailed.data.summary;
+
+      const res = await axios.post("/api/articles", {
         title,
         content,
         summary,
@@ -21,9 +29,10 @@ export function Article() {
 
       console.log("Article added:", res.data);
     } catch (error) {
-      console.error("Add article error:", error);
+      console.error(" article error:", error);
     }
   }
+
   return (
     <div className="flex flex-col w-[856px] h-[442px] items-center mt-50 justify-center gap-3  border rounded-2xl">
       <div className="flex items-center gap-3">
@@ -48,10 +57,10 @@ export function Article() {
         <DocumentIcon />
         <p className="text-gray-400 pr-165">Article Content</p>
       </div>
-      <Input
+      <Textarea
         onChange={(e) => setContent(e.target.value)}
         placeholder="Paste your article content here..."
-        className="w-[800px] h-[120px] pb-20"
+        className="w-[800px] h-[120px] pb-20 "
       />
 
       <Button className="w-[300px] bg-gray-300 ml-125" onClick={addArticle}>

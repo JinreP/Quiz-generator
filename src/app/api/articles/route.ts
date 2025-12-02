@@ -12,7 +12,7 @@ export const GET = async () => {
 };
 
 export const POST = async (req: Request) => {
-  const { title, summary, content } = await req.json( );
+  const { title, summary, content } = await req.json();
   try {
     const article = await prisma.article.create({
       data: {
@@ -22,6 +22,7 @@ export const POST = async (req: Request) => {
       },
     });
     console.log("RESPONSE!", article);
+    console.log("BACKEND RECEIVED:", title, content, summary);
 
     return NextResponse.json(article);
   } catch (error) {

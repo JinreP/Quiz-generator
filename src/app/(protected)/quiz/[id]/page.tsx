@@ -30,6 +30,7 @@ export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
       const res = await axios.get("http://localhost:3000/api/articles");
       const found = res.data.find((article: any) => article.id === Number(id));
       setArticle(found);
+      console.log("FOUND ARTICLE:", found);
     }
     QuizId();
   }, [id]);
@@ -57,7 +58,7 @@ export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
           <Star />
           <h1 className="text-2xl font-bold">Article Quiz Generator</h1>
         </div>
-
+        {/* 
         <div className="flex items-center gap-3">
           <Bookicon />
           <h1 className="text-gray-500 font-bold">Summarized content</h1>
@@ -72,6 +73,20 @@ export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
           <p className="text-gray-400 ">Article Content</p>
         </div>
 
+        <p className="h-[50px] overflow-hidden">{article.content}</p> */}
+        <div className="flex items-center gap-3">
+          <Bookicon />
+          <h1 className="text-gray-500 font-bold">Summarized content</h1>
+        </div>
+
+        <p className="text-md mb-4">{article.summary}</p>
+
+        {/* Full Content */}
+        <div className="flex items-center gap-3 mt-2">
+          <DocumentIcon />
+          <p className="text-gray-400 ">Article Content</p>
+        </div>
+
         <p className="h-[50px] overflow-hidden">{article.content}</p>
         <Dialog>
           <DialogTrigger>
@@ -82,7 +97,7 @@ export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
               <DialogTitle className="font-bold text-2xl mb-4">
                 {article.title}
               </DialogTitle>
-              <DialogDescription>{article.summary}</DialogDescription>
+              <DialogDescription>{article.content}</DialogDescription>
             </DialogHeader>
           </DialogContent>
         </Dialog>
