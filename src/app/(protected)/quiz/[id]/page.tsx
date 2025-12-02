@@ -22,9 +22,6 @@ import axios from "axios";
 
 export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const searchParams = useSearchParams();
-  const articleText = searchParams.get("article") || "";
-
   const [article, setArticle] = useState<any>(null);
   const router = useRouter();
 

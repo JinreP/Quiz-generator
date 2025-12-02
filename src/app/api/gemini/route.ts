@@ -1,20 +1,12 @@
-// /api/gemini/questions/route.ts
 import { GoogleGenAI } from "@google/genai";
 
-// 1) Read the API key once
 const apiKey = process.env.GEMINI_API_KEY;
 
-// 2) Hard fail if it's missing so it doesn't try Google Cloud ADC
-if (!apiKey) {
-  throw new Error(
-    "GEMINI_API_KEY is not set. Put it in .env.local and restart dev server."
-  );
-}
-console.log("🔑 GEMINI_API_KEY:", process.env.GEMINI_API_KEY);
 
-// 3) Force Developer API mode (NOT Vertex AI)
+console.log("GEMINI_API_KEY:", process.env.GEMINI_API_KEY);
+
 const ai = new GoogleGenAI({
-  apiKey, // your Gemini API key
+  apiKey,
   vertexai: false,
 });
 
@@ -28,7 +20,12 @@ export async function POST(req: Request) {
         text: `
 Generate 5 quiz questions from this article.
 
-Return like this but only in JSON only in raw json no codeblocks no markdown no random stuffs:
+Return like this but only in JSON only in raw json no codeblocks no markdown no random stuffs, don't break json
+The output MUST NOT contain Mongolian characters.
+don't break json
+don't include any quotes (“ ” " ") inside the question or answer text .
+
+:
 [
   {
     "question": "string",
@@ -48,7 +45,6 @@ ${article}
     ],
   });
 
-  // In @google/genai, text is a string property, not a function
   const text = result.text || "[]";
 
   console.log(text);

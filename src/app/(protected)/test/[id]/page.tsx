@@ -8,6 +8,16 @@ import {
   SaveIcon,
   Star,
 } from "@/components/icons/icons";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { use, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -97,7 +107,7 @@ export default function QuizText({
                 <div className="flex items-center gap-3">
                   <div className="mt-1">
                     {isCorrect ? <Correct /> : <InCorrect />}
-                  </div>{" "}
+                  </div>
                   <div className="flex flex-col">
                     <p className="text-gray-500">
                       {index + 1}. {questionItem.question}
@@ -150,9 +160,32 @@ export default function QuizText({
           <h1 className="text-2xl font-bold">Quick Test</h1>
         </div>
         <Link href={"http://localhost:3000"}>
-          <Button className="w-12 bg-gray-300 rounded-2xl h-10">
-            <CloseIcon />
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="w-12 bg-gray-300 rounded-2xl h-10">
+                <CloseIcon />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold">
+                  Are you sure?
+                </DialogTitle>
+                <DialogDescription className="text-red-500">
+                  If you press 'Cancel', this quiz will restart from the
+                  beginning.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex items-center gap-3">
+                <Button className="w-[190px] bg-black rounded-2xl text-white">
+                  Go back
+                </Button>
+                <Button className="w-[190px] bg-white rounded-2xl ">
+                  Cancel quiz
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </Link>
       </div>
 
