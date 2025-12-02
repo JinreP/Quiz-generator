@@ -159,39 +159,37 @@ export default function QuizText({
           <Star />
           <h1 className="text-2xl font-bold">Quick Test</h1>
         </div>
-        <Link href={"http://localhost:3000"}>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="w-12 bg-gray-300 rounded-2xl h-10">
-                <CloseIcon />
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="w-12 bg-gray-300 rounded-2xl h-10">
+              <CloseIcon />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="w-[450px] h-[170px]">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold">
+                Are you sure?
+              </DialogTitle>
+              <DialogDescription className="text-red-500">
+                If you press 'Cancel', this quiz will restart from the
+                beginning.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex items-center justify-center  gap-3">
+              <Button
+                onClick={() => window.location.reload()}
+                className="w-[190px] bg-black rounded-2xl text-white"
+              >
+                Go back
               </Button>
-            </DialogTrigger>
-            <DialogContent className="w-[450px] h-[170px]">
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-bold">
-                  Are you sure?
-                </DialogTitle>
-                <DialogDescription className="text-red-500">
-                  If you press 'Cancel', this quiz will restart from the
-                  beginning.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex items-center justify-center  gap-3">
-                <Button
-                  onClick={() => window.location.reload()}
-                  className="w-[190px] bg-black rounded-2xl text-white"
-                >
-                  Go back
+              <Link href={"/"}>
+                <Button className="w-[190px] bg-white rounded-2xl text-black border border-gray-500 ">
+                  Cancel quiz
                 </Button>
-                <Link href={"/"}>
-                  <Button className="w-[190px] bg-white rounded-2xl text-black border border-gray-500 ">
-                    Cancel quiz
-                  </Button>
-                </Link>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </Link>
+              </Link>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="w-[558px] h-[200px] flex flex-col items-center justify-center border rounded-2xl">
