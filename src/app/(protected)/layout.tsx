@@ -21,7 +21,7 @@ export default function ProtectedLayout({
       publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
     >
       <div>
-        <SidebarProvider defaultOpen={false}>
+        <SidebarProvider defaultOpen={true}>
           <div className="w-full">
             <div className="flex justify-between px-10 items-center  w-full">
               <Navbar />

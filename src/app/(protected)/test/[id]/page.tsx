@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { use, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { SpinnerItem } from "@/components/Loading/LoadingQuiz";
 
 export default function QuizText({
   params,
@@ -77,7 +78,7 @@ export default function QuizText({
     }
     saveScore();
   }, [finished]);
-  if (quiz.length === 0) return <p>loading...</p>;
+  if (quiz.length === 0) return <SpinnerItem/>
 
   const question = quiz[current];
 

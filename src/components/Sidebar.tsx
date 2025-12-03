@@ -30,6 +30,7 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { SpinnerHistory } from "./Loading/LoadingHistory";
 
 export function AppSidebar() {
   const [articles, setArticles] = useState<any[]>([]);
@@ -37,10 +38,12 @@ export function AppSidebar() {
   const [editedTitle, setEditedTitle] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const routed = useRouter();
   useEffect(() => {
     async function Load() {
       const res = await axios.get("http://localhost:3000/api/articles");
+      setLoading(false);
       setArticles(res.data);
     }
     Load();
@@ -85,103 +88,112 @@ export function AppSidebar() {
     <Sidebar className="mt-13.5">
       <SidebarTrigger className="absolute right-2 top-1" />
 
-      {sidebar?.state === "expanded" && (
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel className="text-2xl font-bold">
-              History
-            </SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {articles.map((item) => (
-                  <SidebarMenuItem key={item.id} className="my-2 ">
-                    <SidebarMenuButton asChild>
-                      <ContextMenu>
-                        <ContextMenuTrigger>
-                          <span
-                            className="text-[18px]"
-                            onClick={() => routed.push(`/quiz/${item.id}`)}
-                          >
-                            {item.title}
-                          </span>
-                        </ContextMenuTrigger>
+      {loading ? (
+        <SpinnerHistory />
+      ) : (
+        sidebar?.state === "expanded" && (
+          <SidebarContent>
+            <SidebarGroup>
+              <SidebarGroupLabel className="text-2xl font-bold">
+                History
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {articles.map((item) => (
+                    <SidebarMenuItem key={item.id} className="my-2 ">
+                      <SidebarMenuButton asChild>
+                        <ContextMenu>
+                          <ContextMenuTrigger>
+                            <span
+                              className="text-[18px]"
+                              onClick={() => routed.push(`/quiz/${item.id}`)}
+                            >
+                              {item.title}
+                            </span>
+                          </ContextMenuTrigger>
 
-                        <ContextMenuContent>
-                          <Dialog
-                            open={isDialogOpen && selectedId === item.id}
-                            onOpenChange={setIsDialogOpen}
-                          >
-                            <DialogTrigger asChild>
-                              <ContextMenuItem
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setSelectedId(item.id);
-                                  setEditedTitle(item.title);
-                                  setIsDialogOpen(true);
-                                }}
-                              >
-                                Edit
-                              </ContextMenuItem>
-                            </DialogTrigger>
+                          <ContextMenuContent>
+                            <Dialog
+                              open={isDialogOpen && selectedId === item.id}
+                              onOpenChange={setIsDialogOpen}
+                            >
+                              <DialogTrigger asChild>
+                                <ContextMenuItem
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setSelectedId(item.id);
+                                    setEditedTitle(item.title);
+                                    setIsDialogOpen(true);
+                                  }}
+                                >
+                                  Edit
+                                </ContextMenuItem>
+                              </DialogTrigger>
 
-                            <DialogContent>
-                              <DialogHeader>
-                                <DialogTitle>Edit your article</DialogTitle>
-                              </DialogHeader>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>Edit your article</DialogTitle>
+                                </DialogHeader>
 
-                              <Input
-                                placeholder="Type your edited title"
-                                value={editedTitle}
-                                onChange={(e) => setEditedTitle(e.target.value)}
-                              />
+                                <Input
+                                  placeholder="Type your edited title"
+                                  value={editedTitle}
+                                  onChange={(e) =>
+                                    setEditedTitle(e.target.value)
+                                  }
+                                />
 
-                              <Button className="mt-4" onClick={edit}>
-                                Save
-                              </Button>
-                            </DialogContent>
-                          </Dialog>
+                                <Button className="mt-4" onClick={edit}>
+                                  Save
+                                </Button>
+                              </DialogContent>
+                            </Dialog>
 
-                          <Dialog
-                            open={isDeleteDialogOpen && selectedId === item.id}
-                            onOpenChange={setIsDeleteDialogOpen}
-                          >
-                            <DialogTrigger asChild>
-                              <ContextMenuItem
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setSelectedId(item.id);
-                                  setIsDeleteDialogOpen(true);
-                                }}
-                                className="text-red-600 focus:bg-red-50 focus:text-red-700"
-                              >
-                                Delete
-                              </ContextMenuItem>
-                            </DialogTrigger>
+                            <Dialog
+                              open={
+                                isDeleteDialogOpen && selectedId === item.id
+                              }
+                              onOpenChange={setIsDeleteDialogOpen}
+                            >
+                              <DialogTrigger asChild>
+                                <ContextMenuItem
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setSelectedId(item.id);
+                                    setIsDeleteDialogOpen(true);
+                                  }}
+                                  className="text-red-600 focus:bg-red-50 focus:text-red-700"
+                                >
+                                  Delete
+                                </ContextMenuItem>
+                              </DialogTrigger>
 
-                            <DialogContent>
-                              <DialogHeader>
-                                <DialogTitle>
-                                  Are you sure you want to delete this article?
-                                </DialogTitle>
-                              </DialogHeader>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>
+                                    Are you sure you want to delete this
+                                    article?
+                                  </DialogTitle>
+                                </DialogHeader>
 
-                              <Button
-                                className="text-red-600 mt-4 focus:bg-red-50 bg-white border rounded-2xl focus:text-red-700"
-                                onClick={confirmAndDelete}
-                              >
-                                Delete
-                              </Button>
-                            </DialogContent>
-                          </Dialog>
-                        </ContextMenuContent>
-                      </ContextMenu>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
+                                <Button
+                                  className="text-red-600 mt-4 focus:bg-red-50 bg-white border rounded-2xl focus:text-red-700"
+                                  onClick={confirmAndDelete}
+                                >
+                                  Delete
+                                </Button>
+                              </DialogContent>
+                            </Dialog>
+                          </ContextMenuContent>
+                        </ContextMenu>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+        )
       )}
     </Sidebar>
   );
