@@ -41,8 +41,8 @@ export const DELETE = async (req: Request) => {
     const deleted = await prisma.article.delete({
       where: { id },
     });
-
-    return NextResponse.json(deleted);
+    const updatedArticles = await prisma.article.findMany();
+    return NextResponse.json(updatedArticles);
   } catch (error) {
     console.error("failed to delete", error);
     return NextResponse.json({ error }, { status: 500 });

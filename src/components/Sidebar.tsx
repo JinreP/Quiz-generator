@@ -34,9 +34,8 @@ export function AppSidebar() {
   const [articles, setArticles] = useState<any[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [editedTitle, setEditedTitle] = useState("");
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   useEffect(() => {
     async function Load() {
       const res = await axios.get("http://localhost:3000/api/articles");
@@ -63,6 +62,33 @@ export function AppSidebar() {
     }
   }
 
+  async function deleted(id: number) {
+    try {
+      const res = await axios.delete("/api/articles", {
+        data: { id },
+      });
+
+      setArticles(res.data);
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
+  }
+
+  async function confirmAndDelete() {
+    if (!selectedId) return;
+
+    try {
+      const res = await axios.delete("/api/articles", {
+        data: { id: selectedId },
+      });
+
+      setArticles(res.data);
+      setIsDeleteDialogOpen(false);
+      setSelectedId(null);
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
+  }
   const sidebar = useSidebar();
 
   return (
@@ -120,7 +146,37 @@ export function AppSidebar() {
                             </DialogContent>
                           </Dialog>
 
-                          <ContextMenuItem>Delete</ContextMenuItem>
+                          <Dialog
+                            open={isDeleteDialogOpen && selectedId === item.id}
+                            onOpenChange={setIsDeleteDialogOpen}
+                          >
+                            <DialogTrigger asChild>
+                              <ContextMenuItem
+                                onClick={() => {
+                                  setSelectedId(item.id);
+                                  setIsDeleteDialogOpen(true);
+                                }}
+                                className="text-red-600 focus:bg-red-50 focus:text-red-700"
+                              >
+                                Delete
+                              </ContextMenuItem>
+                            </DialogTrigger>
+
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  Are you sure you want to delete this article?
+                                </DialogTitle>
+                              </DialogHeader>
+
+                              <Button
+                                className="text-red-600 mt-4 focus:bg-red-50 bg-white border rounded-2xl focus:text-red-700"
+                                onClick={confirmAndDelete}
+                              >
+                                Delete
+                              </Button>
+                            </DialogContent>
+                          </Dialog>
                         </ContextMenuContent>
                       </ContextMenu>
                     </SidebarMenuButton>
