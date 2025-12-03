@@ -29,6 +29,7 @@ export default function QuizText({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const [score, setScore] = useState(0);
 
   const [current, setCurrent] = useState(0);
   const [quiz, setQuiz] = useState<any[]>([]);
@@ -63,6 +64,19 @@ export default function QuizText({
     createQuiz();
   }, [article]);
 
+  useEffect(() => {
+    async function saveScore() {
+      await fetch("/api/score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          article_id: id,
+          score,
+        }),
+      });
+    }
+    saveScore();
+  }, [finished]);
   if (quiz.length === 0) return <p>loading...</p>;
 
   const question = quiz[current];
@@ -73,6 +87,10 @@ export default function QuizText({
     if (current < quiz.length - 1) {
       setCurrent(current + 1);
     } else {
+      const finalScore = [...userAnswers, a].filter(
+        (ans) => ans.correct
+      ).length;
+      setScore(finalScore);
       setFinished(true);
     }
   }

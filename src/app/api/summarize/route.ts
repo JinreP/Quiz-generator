@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
   const result = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: [{ text: `Summarize shortly:\n${content}` }],
+    contents: [{ text: `Summarize shortly:${content}` }],
   });
 
   const summary = result.text ?? "";

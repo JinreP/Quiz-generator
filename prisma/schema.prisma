@@ -44,6 +44,7 @@ model article {
   updated_at DateTime? @default(now()) @db.Timestamp(6)
   id         Int       @id @default(autoincrement())
   quiz       quiz[]
+  scores     score[]
 }
 
 model quiz {
@@ -53,4 +54,12 @@ model quiz {
   answer     String
   article_id Int
   article    article  @relation(fields: [article_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+
+model score {
+  id         Int     @id @default(autoincrement())
+  score      Int
+  article_id Int
+  article    article @relation(fields: [article_id], references: [id])
 }

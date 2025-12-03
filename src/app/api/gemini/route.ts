@@ -23,7 +23,7 @@ export async function POST(req: Request) {
  The output MUST NOT contain Mongolian characters.
  don't break json
  don't include any quotes (“ ” " ") inside the question or answer text .
-
+make it short so it can fit in the button like max is 4 words quiz questions
 :
 [
   {

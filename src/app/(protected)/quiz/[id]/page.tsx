@@ -58,22 +58,7 @@ export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
           <Star />
           <h1 className="text-2xl font-bold">Article Quiz Generator</h1>
         </div>
-        {/* 
-        <div className="flex items-center gap-3">
-          <Bookicon />
-          <h1 className="text-gray-500 font-bold">Summarized content</h1>
-        </div>
-
-        <h1 className="text-2xl font-bold">{article.title}</h1>
-
-        <p className="">{article.summary}</p>
-
-        <div className="flex items-center gap-3">
-          <DocumentIcon />
-          <p className="text-gray-400 ">Article Content</p>
-        </div>
-
-        <p className="h-[50px] overflow-hidden">{article.content}</p> */}
+       
         <div className="flex items-center gap-3">
           <Bookicon />
           <h1 className="text-gray-500 font-bold">Summarized content</h1>
