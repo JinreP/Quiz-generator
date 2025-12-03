@@ -32,15 +32,20 @@ export const POST = async (req: Request) => {
 
 export const DELETE = async (req: Request) => {
   const { id } = await req.json();
+
   try {
-    const article = await prisma.article.delete({
-      where: {
-        id,
-      },
+    await prisma.score.deleteMany({
+      where: { article_id: id },
     });
-    return NextResponse.json(article);
+
+    const deleted = await prisma.article.delete({
+      where: { id },
+    });
+
+    return NextResponse.json(deleted);
   } catch (error) {
-    console.error(error, "failed to delete");
+    console.error("failed to delete", error);
+    return NextResponse.json({ error }, { status: 500 });
   }
 };
 
@@ -56,8 +61,9 @@ export const PATCH = async (req: Request) => {
         content,
       },
     });
+    const articles = await prisma.article.findMany();
 
-    return NextResponse.json(article);
+    return NextResponse.json(articles);
   } catch (error) {
     console.error("PATCH error:", error);
     return NextResponse.json({ error }, { status: 500 });

@@ -1,7 +1,11 @@
 "use client";
-
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
-
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Sidebar,
   SidebarContent,
@@ -15,12 +19,23 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 
 export function AppSidebar() {
   const [articles, setArticles] = useState<any[]>([]);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [editedTitle, setEditedTitle] = useState("");
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     async function Load() {
@@ -29,13 +44,32 @@ export function AppSidebar() {
     }
     Load();
   }, []);
+
+  async function edit() {
+    if (!selectedId || !editedTitle.trim()) return;
+
+    try {
+      const res = await axios.patch("/api/articles", {
+        id: selectedId,
+        title: editedTitle,
+      });
+
+      setArticles(res.data);
+      setIsDialogOpen(false);
+      setSelectedId(null);
+      setEditedTitle("");
+    } catch (error) {
+      console.error("Edit failed:", error);
+    }
+  }
+
   const sidebar = useSidebar();
+
   return (
     <Sidebar className="mt-13.5">
-      <SidebarHeader className="relative">
-        <SidebarTrigger className="absolute right-2 top-1" />
-      </SidebarHeader>
-      {sidebar?.state == "expanded" && (
+      <SidebarTrigger className="absolute right-2 top-1" />
+
+      {sidebar?.state === "expanded" && (
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel className="text-2xl font-bold">
@@ -44,11 +78,51 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 {articles.map((item) => (
-                  <SidebarMenuItem key={item.title}>
+                  <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton asChild>
-                      <Link href={`http://localhost:3000/quiz/${item.id}`}>
-                        <span className="">{item.title}</span>
-                      </Link>
+                      <ContextMenu>
+                        <ContextMenuTrigger>
+                          <span>{item.title}</span>
+                        </ContextMenuTrigger>
+
+                        <ContextMenuContent>
+                          <Dialog
+                            open={isDialogOpen && selectedId === item.id}
+                            onOpenChange={setIsDialogOpen}
+                          >
+                            <DialogTrigger asChild>
+                              <ContextMenuItem
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setSelectedId(item.id);
+                                  setEditedTitle(item.title);
+                                  setIsDialogOpen(true);
+                                }}
+                              >
+                                Edit
+                              </ContextMenuItem>
+                            </DialogTrigger>
+
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Edit your article</DialogTitle>
+                              </DialogHeader>
+
+                              <Input
+                                placeholder="Type your edited title"
+                                value={editedTitle}
+                                onChange={(e) => setEditedTitle(e.target.value)}
+                              />
+
+                              <Button className="mt-4" onClick={edit}>
+                                Save
+                              </Button>
+                            </DialogContent>
+                          </Dialog>
+
+                          <ContextMenuItem>Delete</ContextMenuItem>
+                        </ContextMenuContent>
+                      </ContextMenu>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
