@@ -21,7 +21,11 @@ export async function POST(req: Request) {
   return NextResponse.json(saved);
 }
 export async function GET(req: Request) {
-  const result = await prisma.score.findMany();
+  const result = await prisma.score.findMany({
+    include: {
+      article: true,
+    },
+  });
   return NextResponse.json(result);
 }
 
@@ -37,10 +41,9 @@ export async function PATCH(req: Request) {
   return NextResponse.json(updaded);
 }
 
-
-export async function  DELETE(req:Request) {
-  const {id} = await req.json()
+export async function DELETE(req: Request) {
+  const { id } = await req.json();
   const deleted = await prisma.score.delete({
-    where: {id}
-  })
+    where: { id },
+  });
 }

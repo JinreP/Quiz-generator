@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/context-menu";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 export function AppSidebar() {
   const [articles, setArticles] = useState<any[]>([]);
@@ -36,6 +37,7 @@ export function AppSidebar() {
   const [editedTitle, setEditedTitle] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const routed = useRouter();
   useEffect(() => {
     async function Load() {
       const res = await axios.get("http://localhost:3000/api/articles");
@@ -96,7 +98,12 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild>
                       <ContextMenu>
                         <ContextMenuTrigger>
-                          <span className="text-[18px]">{item.title}</span>
+                          <span
+                            className="text-[18px]"
+                            onClick={() => routed.push(`/quiz/${item.id}`)}
+                          >
+                            {item.title}
+                          </span>
                         </ContextMenuTrigger>
 
                         <ContextMenuContent>

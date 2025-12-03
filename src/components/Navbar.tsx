@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Scores } from "./Scores";
 export function Navbar() {
   return (
     <div className="flex items-center justify-between px-15 h-[55px]  ">
