@@ -62,18 +62,6 @@ export function AppSidebar() {
     }
   }
 
-  async function deleted(id: number) {
-    try {
-      const res = await axios.delete("/api/articles", {
-        data: { id },
-      });
-
-      setArticles(res.data);
-    } catch (error) {
-      console.error("Delete failed:", error);
-    }
-  }
-
   async function confirmAndDelete() {
     if (!selectedId) return;
 
@@ -104,11 +92,11 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 {articles.map((item) => (
-                  <SidebarMenuItem key={item.id}>
+                  <SidebarMenuItem key={item.id} className="my-2 ">
                     <SidebarMenuButton asChild>
                       <ContextMenu>
                         <ContextMenuTrigger>
-                          <span>{item.title}</span>
+                          <span className="text-[18px]">{item.title}</span>
                         </ContextMenuTrigger>
 
                         <ContextMenuContent>
@@ -152,7 +140,8 @@ export function AppSidebar() {
                           >
                             <DialogTrigger asChild>
                               <ContextMenuItem
-                                onClick={() => {
+                                onClick={(e) => {
+                                  e.preventDefault();
                                   setSelectedId(item.id);
                                   setIsDeleteDialogOpen(true);
                                 }}
