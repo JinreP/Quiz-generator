@@ -22,6 +22,7 @@ export async function POST(req: Request) {
  Return like this but only in JSON only in raw json no codeblocks no markdown no random stuffs, don't break json
  The output MUST NOT contain Mongolian characters.
  don't break json
+ and randomize the position of the correct answer.
  don't include any quotes (“ ” " ") inside the question or answer text .
 make it short so it can fit in the button like max is 4 words quiz questions
 :

@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Item,
@@ -11,8 +12,21 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
+import { useState } from "react";
+import { setTimeout } from "timers/promises";
 
 export function SpinnerItem() {
+  const [percent, setPercent] = useState(0);
+  function AAAA() {
+    if (percent < 100) {
+      setPercent((prev) => prev + 1);
+    } else {
+      setPercent(100);
+    }
+  }
+
+  setInterval(AAAA, 1000);
+
   return (
     <div className="flex w-full  flex-col gap-4 h-screen items-center justify-center pb-200  [--radius:1rem]">
       <Item variant="outline" className="w-[500px]">
@@ -21,7 +35,7 @@ export function SpinnerItem() {
         </ItemMedia>
         <ItemContent>
           <ItemTitle>Loading...</ItemTitle>
-          <ItemDescription>29% / 100% </ItemDescription>
+          <ItemDescription>{percent}/ 100% </ItemDescription>
         </ItemContent>
         <ItemActions className="hidden sm:flex">
           <Link href={"/"}>
@@ -31,7 +45,7 @@ export function SpinnerItem() {
           </Link>
         </ItemActions>
         <ItemFooter>
-          <Progress value={75} />
+          <Progress value={percent} />
         </ItemFooter>
       </Item>
     </div>
