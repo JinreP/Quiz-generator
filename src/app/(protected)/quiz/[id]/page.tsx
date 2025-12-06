@@ -19,23 +19,27 @@ import {
 } from "@/components/icons/icons";
 import { use, useEffect, useState } from "react";
 import axios from "axios";
+import { SpinnerItem } from "@/components/Loading/LoadingQuiz";
 
 export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [article, setArticle] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     async function QuizId() {
       const res = await axios.get("http://localhost:3000/api/articles");
       const found = res.data.find((article: any) => article.id === Number(id));
-      setArticle(found);
-      console.log("FOUND ARTICLE:", found);
+      setTimeout(() => {
+        setArticle(found);
+        setLoading(false);
+      }, 3000);
     }
     QuizId();
   }, [id]);
 
-  if (!article) return <p>not found</p>;
+  if (!article) return <SpinnerItem />;
 
   const handleRouter = (e: any) => {
     e.preventDefault();
@@ -58,7 +62,7 @@ export default function Quiz({ params }: { params: Promise<{ id: string }> }) {
           <Star />
           <h1 className="text-2xl font-bold">Article Quiz Generator</h1>
         </div>
-       
+
         <div className="flex items-center gap-3">
           <Bookicon />
           <h1 className="text-gray-500 font-bold">Summarized content</h1>

@@ -21,7 +21,7 @@ export function SpinnerItem() {
     const interval = setInterval(() => {
       setPercent((percent) => {
         if (percent >= 100) return 100;
-        return percent + 1;
+        return percent + 5;
       });
     }, 100);
 
