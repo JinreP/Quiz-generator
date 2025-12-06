@@ -12,20 +12,21 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { setTimeout } from "timers/promises";
 
 export function SpinnerItem() {
   const [percent, setPercent] = useState(0);
-  function AAAA() {
-    if (percent < 100) {
-      setPercent((prev) => prev + 1);
-    } else {
-      setPercent(100);
-    }
-  }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPercent((percent) => {
+        if (percent >= 100) return 100;
+        return percent + 1;
+      });
+    }, 100);
 
-  setInterval(AAAA, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex w-full  flex-col gap-4 h-screen items-center justify-center pb-200  [--radius:1rem]">
