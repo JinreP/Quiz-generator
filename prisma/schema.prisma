@@ -56,7 +56,6 @@ model quiz {
   article    article  @relation(fields: [article_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-
 model score {
   id         Int     @id @default(autoincrement())
   score      Int
